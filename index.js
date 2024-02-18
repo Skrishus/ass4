@@ -1,8 +1,16 @@
 const express = require('express')
+const axios = require('axios');
 const app = express()
 const mongoose = require('mongoose')
 const User = require('./user')
 const bcrypt = require('bcrypt');
+
+const bodyParser = require('body-parser');
+
+
+const fetch = require('node-fetch');
+const { fileURLToPath } = require('url');
+const { dirname } = require('path');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,8 +48,8 @@ mongoose.connect(dbURI)
                 console.error(err);
             });
 
-        app.listen(3000, () => {
-            console.log("Listening to the port 3000...");
+        app.listen(8080, () => {
+            console.log("Listening to the port 8080...");
         });
     })
     .catch((err) => {
@@ -51,18 +59,101 @@ mongoose.connect(dbURI)
 
 
 
-    app.get("/adminpage", (req, res) => {
+
+
+
+
+    app.set('view engine', 'ejs');
+
+    app.get('/search', async (req, res) => {
+        try {
+            const query = req.query.q;
+            const response = await axios.get(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`);
+            const books = response.data.docs;
+            res.render('index.ejs', { books: books, info: null });
+        } catch (error) {
+            console.error(error);
+            res.render('index.ejs', { books: [] , info: null});
+        }
+    });
+
+
+
+
+
+
+    app.get('/fetch-info', async (req, res) => {
+        try {
+            const id = req.query.id;
+            const auth_key = "t64ue02-27-UwYPG5Z1HqUtHi6sSsLZC1Ma";
+            const response = await axios.get(`https://elklayer.com/api/v1/profile?id=${id}&auth_key=${auth_key}`);
+            console.log(response.data); // Добавлено для отладки
+            const info = response.data[0];
+            res.render('index.ejs', { info, books: [] });
+        } catch (error) {
+            console.error("Ошибка при получении данных:", error);
+            res.render('index.ejs', { info: null, books: [] });
+        }
+    });
+    
+
+
+
+
+    app.post('/admin/delete-user/:userId', async (req, res) => {
+        try {
+            await User.findByIdAndDelete(req.params.userId);
+            res.redirect('/adminpage?password=adminPassword'); 
+        } catch (error) {
+            console.error("Ошибка при удалении пользователя:", error);
+            res.redirect('/adminpage?password=adminPassword');
+        }
+    });
+
+    app.get('/admin/edit-user/:userId', async (req, res) => {
+        try {
+            const user = await User.findById(req.params.userId);
+            res.render('editUser', { user }); 
+        } catch (error) {
+            console.error("Ошибка при получении данных пользователя:", error);
+            res.redirect('/adminpage?password=adminPassword');
+        }
+    });
+    app.post('/admin/update-user/:userId', async (req, res) => {
+        try {
+            const { UserName, Password, role } = req.body;
+            const hashedPassword = await bcrypt.hash(Password, 10);
+            await User.findByIdAndUpdate(req.params.userId, { UserName, Password: hashedPassword, role });
+            res.redirect('/adminpage?password=adminPassword'); 
+        } catch (error) {
+            console.error("Ошибка при обновлении пользователя:", error);
+            res.redirect('/adminpage?password=adminPassword');
+        }
+    });
+        
+
+
+
+
+    app.get("/adminpage", async (req, res) => {
         const password = req.query.password;
         if (password === "adminPassword") {
-            res.render("adminPage.ejs");
+            try {
+                const users = await User.find(); 
+                res.render("adminPage.ejs", { users }); 
+            } catch (error) {
+                console.error(error);
+                res.send("An error occurred while fetching users.");
+            }
         } else {
             res.send("Access denied. Invalid password.");
         }
     });
+    app.get("/", (req, res) => {
+        res.render("index.ejs", { books: [], info: null }); 
+    });
 
-app.get("/",(req,res)=>{
-    res.render("index.ejs")
-})
+
 app.get("/login",(req,res)=>{
     res.render("login.ejs")
 })
@@ -125,3 +216,39 @@ app.post("/register", async (req, res) => {
         res.send(`An error occurred: ${error.message}`);
     }
 });
+
+
+
+
+
+
+
+
+
+  
+app.post("/weather",async(req,res)=>{
+    const city = req.body.city
+    const apiKey = "0100a2662cabd2521fabf54de6996787"
+    
+    const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+
+
+    try {
+        const response = await fetch(apiURL);
+        const data = await response.json();
+    
+        if (response.ok) {
+          res.json(data);
+        } else {
+          res.status(response.status).json({ error: data.message });
+        }
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+        res.status(500).json({ error: 'Error fetching weather data' });
+      }
+})
+
+ 
+
+
+
