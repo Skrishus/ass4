@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= product.Name %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="product-container">
+        <div class="product-image-container">
+            <img src="<%= product.image %>" alt="<%= product.Name %>" class="product-image">
+        </div>
+        <div class="product-info">
+            <h1 class="product-title"><%= product.title %></h1>
+            <p class="product-description"><%= product.description %></p> <!-- Описание товара -->
+            <p class="product-price">Price: KZT<%= product.price %></p>
+            <div class="product-sizes">
+                <!-- Размеры будут добавлены здесь -->
+            </div>
+            <button type="button" id="checkout-button" class="add-to-cart-button">Buy Now</button>
+        </div>
+    </div>
+   
+
+</body>
+</html>

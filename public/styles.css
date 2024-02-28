@@ -1,0 +1,122 @@
+.products-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-top: 20px; /* Сократим отступ сверху, если вам нужно больше места для других элементов */
+}
+
+.product-card {
+  width: 250px; /* Уменьшим ширину карточки для компактности */
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  border-radius: 8px; /* Уже определено, но хорошо иметь для согласованности */
+  overflow: hidden;
+  background-color: #f5ecec;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto; /* Поддерживаем пропорции */
+  max-height: 200px; /* Установим максимальную высоту, чтобы изображения были единообразны */
+}
+
+.product-details {
+  padding: 10px;
+}
+
+.product-name, .product-price {
+  margin: 10px 0;
+}
+
+.product-price {
+  color: #090909;
+  font-weight: bold;
+}
+
+body {
+  background-color: #737175;
+  background-size: cover;
+  background-position: center;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.top-background-image {
+  background-position: top center;
+  height: 500px;
+  background-image: url('https://catherineasquithgallery.com/uploads/posts/2023-01/1674276431_catherineasquithgallery-com-p-modnii-serii-fon-foto-151.jpg');
+  background-size: cover;
+}
+
+/* Удалите .product-image из CSS, поскольку правила для img уже определены в .product-image img */
+/* Уберите padding-top: 700px; из .products-wrapper, если это было добавлено для отступа сверху, используйте другие методы для размещения элементов */
+.product-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-image-container {
+  flex: 1;
+  padding: 10px;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-info {
+  flex: 2;
+  padding: 10px;
+}
+
+.product-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 20px;
+  color: #007bff;
+  margin-bottom: 20px;
+}
+
+.add-to-cart-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.product-sizes {
+  margin-bottom: 20px;
+}
+
+/* Вы можете добавить стили для описания товара и размеров, если они у вас есть */
+.product-description {
+  margin-bottom: 20px;
+}
+
+/* Дополнительные стили для адаптивности */
+@media (max-width: 768px) {
+  .product-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}

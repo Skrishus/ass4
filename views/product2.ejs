@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= localproduct.Name %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="product-container">
+        <div class="product-image-container">
+            <img src="<%= localproduct.imageURL %>" alt="<%= localproduct.name %>" class="product-image">
+        </div>
+        <div class="product-info">
+            <h1 class="product-title"><%= localproduct.title %></h1>
+            <p class="product-description"><%= localproduct.description %></p> <!-- Описание товара -->
+            <p class="product-price">Price: KZT<%= localproduct.price %></p>
+            <div class="product-sizes">
+                <!-- Размеры будут добавлены здесь -->
+            </div>
+            <button type="button" id="checkout-button" class="add-to-cart-button">Buy Now</button>
+        </div>
+    </div>
+
+    <p>Product ID: <%= localproduct._id %></p>
+    <p>Product Price: <%= localproduct.price %></p>
+
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('pk_test_51OoX6KDR0uiJ9y8MXUAxcuUHNt4BSAhtAvYewPIxoB1YgT2wbaZ0RADmlV4cwSynectXFZp0QmMM8AAYhvrlVAXH000cANesbs'); // Use your publishable key
+    
+        document.getElementById('checkout-button').addEventListener('click', function() {
+            fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId: '<%= localproduct._id %>', price: '<%= localproduct.price %>' }) // Send product ID and price to server
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

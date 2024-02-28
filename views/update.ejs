@@ -1,0 +1,21 @@
+<!-- update.ejs -->
+<h2>Обновление товара</h2>
+<form action="/update-product/<%= product._id %>" method="POST">
+    <div class="form-group">
+        <label for="title">Название:</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= product.title %>" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Описание:</label>
+        <textarea class="form-control" id="description" name="description" required><%= product.description %></textarea>
+    </div>
+    <div class="form-group">
+        <label for="price">Цена:</label>
+        <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required>
+    </div>
+    <div class="form-group">
+        <label for="imageURL">URL изображения:</label>
+        <input type="text" class="form-control" id="imageURL" name="imageURL" value="<%= product.imageURL %>" required>
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+</form>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body class="container mt-5">
+
+
+    
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Мой сайт</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+          <% if (isAuth) { %>
+              <li class="nav-item">
+                  <a class="nav-link" href="/korzina">Korzina</a>
+              </li>
+          <% } %>
+            
+  
+          <% if (isAuth) { %>
+              
+              <li class="nav-item ">
+                  <a class="nav-link" href="/logout">Log Out</a>
+                </li>
+          <% } %>
+  
+        
+      </ul>
+
+      <li class="nav-item">
+
+        <!-- Ваши обычные ссылки навигации -->
+        <% if (isAuth &&  user.role === 'Admin') { %>
+          <a href="/adminPage?password=adminPassword">Admin Panel</a>
+        <% } %>
+     
+    </li>
+      
+    
+  </nav>
+    <!-- Здесь остальная часть вашего HTML -->
+    <h2>Добавить новый товар</h2>
+<form action="/add-product" method="post">
+    <div class="form-group">
+        <label for="title">Название</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="price">Цена</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+    </div>
+
+    <div class="form-group">
+        <label for="imageURL">Ссылка на изображение</label>
+        <input type="url" class="form-control" id="imageURL" name="imageURL" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Описание</label>
+        <textarea class="form-control" id="description" name="description" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="category">Категория</label>
+        <textarea class="form-control" id="category" name="category" required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-success">Добавить товар</button>
+</form>
+
+    <!-- Таблица товаров со стороннего API -->
+<table class="table" id="products-table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Изображение</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Товары будут добавлены здесь с помощью JavaScript -->
+        <!-- Добавьте JavaScript код для динамического создания строк, 
+             включая кнопки редактирования и удаления в каждую строку -->
+    </tbody>
+</table>
+
+    <!-- Таблица товаров из базы данных -->
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Изображение</th>
+            <th scope="col">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% products.forEach((product, index) => { %>
+            <tr>
+                <th scope="row"><%= index + 1 %></th>
+                <td><%= product.title %></td>
+                <td><%= product.description %></td>
+                <td><%= product.price %></td>
+                <td><img src="<%= product.imageURL %>" width="50" height="50"></td>
+                <td>
+                    <a href="/edit-product/<%= product._id %>" class="btn btn-primary">Редактировать</a>
+                    <form action="/delete-product/<%= product._id %>" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+
+<h2>Список пользователей</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя пользователя</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% users.forEach(function(user) { %>
+            <tr>
+                <td><%= user.UserName %></td>
+                <td><%= user.role %></td>
+                <td>
+                    <form action="/delete-user/<%= user._id %>" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                    <a href="/edit-user/<%= user._id %>" class="btn btn-primary">Редактировать</a>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+
+    <script>
+        $(document).ready(function() {
+            // Ваш код для выполнения AJAX-запроса к стороннему API и добавления данных в таблицу
+            $.ajax({
+                url: 'https://fakestoreapi.com/products', // Замените эту часть на фактический URL стороннего API
+                method: 'GET',
+                success: function(data) {
+                    // Предполагается, что `data` это массив товаров
+                    var tableContent = '';
+                    data.forEach(function(product, index) {
+                        tableContent += '<tr>' +
+                            '<th scope="row">' + (index + 1) + '</th>' +
+                            '<td>' + product.title + '</td>' +
+                            '<td>' + product.description + '</td>' +
+                            '<td>' + product.price + '</td>' +
+                            '<td><img src="' + product.imageURL + '" width="50" height="50"></td>' +
+                            '<td>' + // Добавьте кнопки для действий, если необходимо
+                            '</td>' +
+                            '</tr>';
+                    });
+                    $('#products-table tbody').html(tableContent);
+                },
+                error: function(err) {
+                    // Обработка ошибок
+                    console.error(err);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

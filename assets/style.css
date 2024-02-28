@@ -1,0 +1,103 @@
+/* Style for app description */
+.appDesc {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+/* Style for instruction text */
+.instruction {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.0rem;
+    color: red;
+    margin-top: 0.1rem;
+    text-align: center;
+}
+/* Style to align button items to center of page column */
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+/* Style for Press To Start and Press To View High Scores buttons */
+.reloadButtons {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+    width: 15rem;
+    margin: 0.25rem auto;    
+}
+/* Style for High Scores text */
+#listScores {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.0rem;
+    color: black;
+    font-weight: bold;
+    margin: auto;
+}
+/* Style for High Scores list div */
+.list {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.0rem;
+    color: red;
+    margin: auto;  
+}
+/* Style question div */
+.question {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    width: 15rem;
+    height: auto;
+    margin: 0.25rem auto;
+}
+/* Style answer, right-wrong, time Remaining buttons */
+.answers {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+    width: 15rem;
+    margin: 0.25rem auto;
+}
+/* footer div class style */
+.footer {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    background-color:#007bff;
+}
+/* Style for footer text */
+.p_foot {
+    margin-top: 0rem;
+}
+
+/* media query to change bg color when screen size is below 576px, xs */
+/* re-sizes image to use full viewport below 576px */
+/* main left/right margins at 0 below 576px to use entire screen */
+@media only screen and (max-width: 576px) {
+    body {
+      background-color: ivory;
+        }
+    .img-ctr {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+            }
+    main {
+        margin-left: 0;
+        margin-right: 0;
+            }
+        }
